@@ -1,0 +1,185 @@
+*
+{
+    margin: 0%;
+    padding: 0%;
+    border: border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+#modal-update
+{
+    z-index: 1;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.712);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 400vh;
+    display: none;
+}
+#content
+{
+    background-color: white;
+    margin-bottom: 85rem;
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+#cross
+{
+    font-size: 3.4rem;
+    align-self: flex-end;
+    margin: -1.7rem;
+    cursor: pointer;
+}
+#cross:hover
+{
+   opacity: 0.7;
+}
+#top
+{
+    display: block;
+    position: relative;
+    left: 50rem;
+}
+i{
+    width: 200px;
+}
+p{
+    transition: all 0.7s;
+    margin-left: 1rem;
+}
+p .button
+{
+    margin: 1rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+p .button:hover
+{
+    font-size: 1.2rem;
+}
+#modal-add
+{
+    display: none;
+    transition: all 0.7s;
+}
+section
+{
+    display: flex;
+    flex-direction: column;
+}
+section h3
+{
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+section input
+{
+    padding: 0.5rem;
+    margin: 1rem;
+    border: none;
+    background-color: rgb(240, 238, 235);
+    border-bottom: 1px blue solid;
+    border-radius: 0.6rem;
+}
+section .btns
+{
+    background-color: blue;
+    color: white;
+    padding: 1rem;
+    transition: all 0.7s;
+}
+.btns:hover
+{
+    font-size: 1rem;
+}
+body
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1rem;
+}
+h1
+{
+   font-size: 3rem;
+   margin-bottom: 2rem;
+}
+.search-bar
+{
+    width: 80%;
+    padding: 1rem;
+    border: none;
+    border-bottom: 4px blue solid;
+    margin-bottom: 2rem;
+    background-color: rgb(236, 236, 234);
+}
+.search-bar:focus
+{
+    outline: none;
+}
+#contacts
+{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    list-style-type:none;
+}
+div
+{
+    border-bottom: 3px blue solid;
+}
+li,h2
+{
+    border-bottom: 1px blue solid;
+    padding: 0.7rem;
+}
+li
+{
+    color: rgb(107, 192, 178);
+}
+.button
+{
+    background-color: blue;
+    color: white;
+    border: none;
+    padding:1rem;
+    border-radius: 0.5rem;
+    margin: 3px;
+    transition: all 0.7s;
+    font-size: 2rem;
+    cursor: pointer;
+}
+.buttons
+{
+    border: none;
+    cursor: pointer;
+}
+.button:hover{
+    font-size:2.3rem ;
+    opacity: 0.8;
+ }
+#invalid,#invalide
+{
+    margin: auto;
+    color: rgb(247, 39, 39);
+    display: none;
+    border: none;
+}
+
+
+@media(min-width: 1200px)
+{
+    #contacts
+    {
+        width: 70%;
+    }
+    .search-bar
+    {
+        width: 70%;
+    }
+}
