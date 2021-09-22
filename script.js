@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 const modal_up = document.getElementById('modal-update');
 const modal_add = document.getElementById('modal-add');
 const close = document.getElementById('cross');
@@ -25,7 +25,7 @@ window.addEventListener("click",function (evt) {
 
 function verif(name,number) {
     regName = /^[a-zA-Z]{1}[a-zA-Zéè 1-9]{2,}$/;
-    regNumber = /^[0-9+]{9,13}$/;
+    regNumber = /^[0-9+ ]{6,20}$/;
     var p = document.querySelectorAll("#invalid");
     var bool = true;
     if(regName.test(name.value))
@@ -54,29 +54,6 @@ function verif(name,number) {
 
     return bool;
 }
-
-function deletes() {
-    var deletes = document.querySelectorAll("#delete-secondary");
-    for (let i = 0; i < deletes.length; i++) {
-        deletes[i].addEventListener("click",function() {
-            var parent = deletes[i].parentNode;
-            var max_parent = parent.parentNode;
-            max_parent.style.display= "none";
-        }); 
-    }
-}
-
-function updates() {
-    var updates = document.querySelectorAll("#update-secondary");
-    for (let i = 0; i < updates.length; i++) {
-        updates[i].addEventListener("click",()=>{
-            modal_up.style.display = "flex";
-        });    
- 
-       }
-}
-
-
 
 search_bar.addEventListener("input",function()
 {
@@ -118,86 +95,6 @@ search_bar.addEventListener("blur",function(){
     }
 });
 
-function Load_json(response) {
-
-            if(response=" ")
-            {
-
-            }
-            else{
-                var contacts_list = JSON.parse(response);
-           
-            contacts_list.forEach(element => {
-                var name = element.name;
-                var number = element.number;
-                var position = name[0];
-                var main;
-                position = position.toUpperCase();
-        
-                var contacts = document.getElementById("contacts");
-                contacts = contacts.childNodes;
-                for (let i = 0; i < contacts.length; i++) {
-                    if(contacts[i].id == position)
-                    {
-                        main = contacts[i];
-                    }
-                }
-
-        
-                // Creating elements
-               var list_elmt = document.createElement("li");
-               var p_elmt = document.createElement("p");
-               var list_del = document.createElement("button");
-               var list_up = document.createElement("button");
-        
-               list_elmt.innerHTML = name;
-               p_elmt.innerHTML = number;
-               list_del.innerHTML = "Delete";
-               list_del.className = "button";
-               list_del.style.transition = "all 0.7s";
-               list_up.innerHTML = "Update";
-               list_up.className = "button";
-
-        
-               list_del.addEventListener("click",function() {
-                //   list_elmt.style.display = "none";
-                var parent = list_elmt.parentNode;
-                parent.removeChild(list_elmt);
-               });
-        
-               list_up.addEventListener("click",function() {
-                modal_up.style.display = "flex";
-        
-                up_btn.addEventListener("click",()=>{
-    
-                    if(verif(name_up,number_up)){
-                      modal_up.style.display = "none";
-                      var actual = "";
-                      actual = '<li>'+name_up.value+'<p>'+number_up.value+'<button class="button" id="delete-secondary">Delete</button><button class="button" id="update-secondary">Update</button></p></li>';
-                      var list = document.createElement("li");
-                      name_up.value = "";
-                      number_up.value = "";
-                      list.innerHTML = actual;
-                      main.appendChild(list);
-                      deletes();
-                      updates();
-                      var parent2 = list_elmt.parentNode;
-                      parent2.removeChild(list_elmt);
-                    }
-                });  
-               
-         
-               });
-
-               main.appendChild(list_elmt);
-               list_elmt.appendChild(p_elmt);
-               p_elmt.appendChild(list_del);
-               p_elmt.appendChild(list_up); 
-            });
-            }
-         
-}
-
 
 var xhr = new XMLHttpRequest();
 
@@ -210,8 +107,30 @@ var xhr = new XMLHttpRequest();
             var contacts_list = JSON.parse(this.responseText);
            
             contacts_list.forEach(element => {
+               
                 var name = element.name;
                 var number = element.number;
+                var nom = "";
+                var num = "";
+                var if_exists = "";
+
+                var lists = document.querySelectorAll('li');
+
+                for (let i = 0; i < lists.length; i++) {
+                    const sec = lists[i];
+                    var val = sec.firstChild;
+                    var next = sec.childNodes[1];
+                    num = next.firstChild.nodeValue
+                    nom = val.nodeValue;
+
+                    if(name.toUpperCase() == nom.toUpperCase() && number==num)
+                    {
+                        if_exists = "Contact already exists";
+                    }
+                }
+               
+            if(if_exists == ""){
+
                 var position = name[0];
                 var main;
                 position = position.toUpperCase();
@@ -245,27 +164,47 @@ var xhr = new XMLHttpRequest();
                 //   list_elmt.style.display = "none";
                 var parent = list_elmt.parentNode;
                 parent.removeChild(list_elmt);
+
+                var xhr = new XMLHttpRequest();
+           
+                    xhr.open("GET","load.php?x=delete&name= &number= &name_init="+element.name+"&num_init="+element.number+"&name_up="+name_up.value+"&num_up="+ number_up.value,true);
+                    xhr.onload = function() {
+                        if(this.status == 200)
+                        {
+                            // console.log(this.responseText);
+                            list_elmt.style.display = "none";
+                            Load_json(this.responseText);
+                            alert("Contact deleted");
+                        }
+                    }
+                    
+                    xhr.send();
                });
         
                list_up.addEventListener("click",function() {
+                
                 modal_up.style.display = "flex";
         
                 up_btn.addEventListener("click",()=>{
-    
-                    // if(verif(name_up,number_up)){
-                    //   modal_up.style.display = "none";
-                    //   var actual = "";
-                    //   actual = '<li>'+name_up.value+'<p>'+number_up.value+'<button class="button" id="delete-secondary">Delete</button><button class="button" id="update-secondary">Update</button></p></li>';
-                    //   var list = document.createElement("li");
-                    //   name_up.value = "";
-                    //   number_up.value = "";
-                    //   list.innerHTML = actual;
-                    //   main.appendChild(list);
-                    //   deletes();
-                    //   updates();
-                    //   var parent2 = list_elmt.parentNode;
-                    //   parent2.removeChild(list_elmt);
-                    // }
+
+                if(verif(name_up,number_up)){
+                   modal_up.style.display = "none";
+                    var xhr = new XMLHttpRequest();
+           
+                    xhr.open("GET","load.php?x=update&name= &number= &name_init="+element.name+"&num_init="+element.number+"&name_up="+name_up.value+"&num_up="+ number_up.value,true);
+                    xhr.onload = function() {
+                        if(this.status == 200)
+                        {
+                            // console.log(this.responseText);
+                            this.style.display = "none";
+                            Load_json(this.responseText);
+                            alert("Contact updated");
+                        }
+                    }
+                    name_up.value = "";
+                    number_up.value = "";
+                    xhr.send();
+                 }
                 });  
                
          
@@ -275,9 +214,12 @@ var xhr = new XMLHttpRequest();
                list_elmt.appendChild(p_elmt);
                p_elmt.appendChild(list_del);
                p_elmt.appendChild(list_up); 
+            }
+            else
+            {
+                console.log(if_exists);
+            }
             });
-            var all_li = document.querySelectorAll('li');
-            console.log(all_li)
          
         }
         
@@ -323,22 +265,152 @@ add.addEventListener("click",function() {
        {
            var nom = nam.value;
            var num = number.value;
+           nam.value = "";
+           number.value = "";
            modal_add.style.display =  "none";
 
            var xhr = new XMLHttpRequest();
-           
-           xhr.open("GET","load.php?name="+nom+"&number="+num+"&num_init= &name_init= &name_up= &num_up= ",true);
+           var res;
+           xhr.open("GET","load.php?x=add&name="+nom+"&number="+num+"&num_init= &name_init= &name_up= &num_up= ",true);
            xhr.onload = function() {
                if(this.status == 200)
                {
-                   console.log(this.responseText);
-                   Load_json(this.responseText);
+                   var res = this.responseText;
+                   Load_json(res);
                }
            }
-           
            xhr.send();
        }
     });
 
 });
 
+function Load_json(response) {
+
+    if(response == "")
+    {
+        var all_li = document.querySelectorAll('li');
+        for (let i = 0; i < all_li.length; i++) {
+            const element = all_li[i];
+            document.removeChild(element);
+        }
+    }
+    else{
+        var contacts_list = JSON.parse(response);
+           
+        contacts_list.forEach(element => {
+           
+            var name = element.name;
+            var number = element.number;
+            var nom = "";
+            var num = "";
+            var if_exists = "";
+
+            var lists = document.querySelectorAll('li');
+
+            for (let i = 0; i < lists.length; i++) {
+                const sec = lists[i];
+                var val = sec.firstChild;
+                var next = sec.childNodes[1];
+                num = next.firstChild.nodeValue
+                nom = val.nodeValue;
+
+                if(name.toUpperCase() == nom.toUpperCase() && number==num)
+                {
+                    if_exists = "Contact already exists";
+                }
+            }
+           
+        if(if_exists == ""){
+
+            var position = name[0];
+            var main;
+            position = position.toUpperCase();
+    
+            var contacts = document.getElementById("contacts");
+            contacts = contacts.childNodes;
+            for (let i = 0; i < contacts.length; i++) {
+                if(contacts[i].id == position)
+                {
+                    main = contacts[i];
+                }
+            }
+            
+            
+            // Creating elements
+           var list_elmt = document.createElement("li");
+           var p_elmt = document.createElement("p");
+           var list_del = document.createElement("button");
+           var list_up = document.createElement("button");
+    
+           list_elmt.innerHTML = name;
+           p_elmt.innerHTML = number;
+           list_del.innerHTML = "Delete";
+           list_del.className = "button";
+           list_del.style.transition = "all 0.7s";
+           list_up.innerHTML = "Update";
+           list_up.className = "button";
+
+    
+           list_del.addEventListener("click",function() {
+            //   list_elmt.style.display = "none";
+            var parent = list_elmt.parentNode;
+            parent.removeChild(list_elmt);
+
+            var xhr = new XMLHttpRequest();
+       
+                xhr.open("GET","load.php?x=delete&name= &number= &name_init="+element.name+"&num_init="+element.number+"&name_up="+name_up.value+"&num_up="+ number_up.value,true);
+                xhr.onload = function() {
+                    if(this.status == 200)
+                    {
+                            list_elmt.style.display = "none";
+                            Load_json(this.responseText);
+                            alert("Contact deleted");
+                    }
+                }
+                
+                xhr.send();
+           });
+    
+           list_up.addEventListener("click",function() {
+            
+            modal_up.style.display = "flex";
+    
+            up_btn.addEventListener("click",()=>{
+
+            if(verif(name_up,number_up)){
+               modal_up.style.display = "none";
+                var xhr = new XMLHttpRequest();
+       
+                xhr.open("GET","load.php?x=update&name= &number= &name_init="+element.name+"&num_init="+element.number+"&name_up="+name_up.value+"&num_up="+ number_up.value,true);
+                xhr.onload = function() {
+                    if(this.status == 200)
+                    {
+                        list_elmt.style.display = "none";
+                        Load_json(this.responseText);
+                        alert("Contact updated");
+                    }
+                }
+                name_up.value = "";
+                number_up.value = "";
+                xhr.send();
+             }
+            });  
+           
+     
+           });
+
+           main.appendChild(list_elmt);
+           list_elmt.appendChild(p_elmt);
+           p_elmt.appendChild(list_del);
+           p_elmt.appendChild(list_up); 
+        }
+        else
+        {
+            console.log(if_exists);
+        }
+        });
+     
+    }
+ 
+}
