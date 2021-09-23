@@ -113,10 +113,15 @@ h1
 {
     width: 80%;
     padding: 1rem;
+    padding-left: 3rem;
     border: none;
     border-bottom: 4px blue solid;
     margin-bottom: 2rem;
+    background-image: url('search-icon.png');
+    background-position: 12px 15px; 
+    background-repeat: no-repeat; 
     background-color: rgb(236, 236, 234);
+    font-size: 0.9rem;
 }
 .search-bar:focus
 {

@@ -196,7 +196,7 @@ var xhr = new XMLHttpRequest();
                         if(this.status == 200)
                         {
                             // console.log(this.responseText);
-                            this.style.display = "none";
+                            list_elmt.style.display = "none";
                             Load_json(this.responseText);
                             alert("Contact updated");
                         }
